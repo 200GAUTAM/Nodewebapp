@@ -2,7 +2,7 @@ var User = require('../models/user');
 var config = require('../../config');
 var secretKey = config.secretKey;
 
-module.exports = function(app, express){
+module.exports = function(app,  express){
 	var api = express.Router();
 	api.post('/signup', function(req, res){
 		var user = new User({
