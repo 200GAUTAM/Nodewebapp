@@ -2,7 +2,7 @@ var User = require('../models/user');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
-
+var Story = require('../models/story');
 function createToken(user){
 	var token = jsonwebtoken.sign({
 		_id: user._id,
@@ -92,9 +92,21 @@ api.use(function(req, res, next) {
 
 });
 
-api.get('/', function(req, res) {
-	res.json("Hello World");
-});
+api.route('/')
+	.post(function(req, res) {
+		var story = new Story({
+			creator:  req.decoded._id,
+			content:  req.body.content
+		});
+		story.save(function(err){
+			if(err) {
+				res.send(err);
+				return
+			}
+			res.json({message: "New story Created!"});
+		});
+	});
+
 return api;
 }
 
